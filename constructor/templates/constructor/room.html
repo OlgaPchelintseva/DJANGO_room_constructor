@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'constructor/css/style.css' %}">
+    <title>Конструктор комнаты - {{ room.name }}</title>
+</head>
+<body>
+    <header>
+        <h1>Конструктор комнаты</h1>
+        <p>Комната: <strong>{{ room.name }}</strong></p>
+    </header>
+    <main>
+        <aside>
+            <h2>Каталог мебели</h2>
+            <p>Перетащите предмет на рабочую область:</p>
+            <div class="catalog-list">
+                {% for item in furniture_catalog %}
+                    <div class="catalog-item" draggable="true" data-id="{{ item.id }}" data-name="{{ item.name }}" data-image="{{ item.image.url }}">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                        <span>{{ item.name }}</span>
+                    </div>
+                {% empty %}
+                    <p class="empty-msg">Каталог пуст</p>
+                {% endfor %}
+            </div>
+        </aside>
+        <section class="room-panel">
+            <div class="room-workspace" id="roomWorkspace" data-room-id="{{ room.id }}">
+                {% for placed in placed_furniture %}
+                    <div class="placed-item" style="left: {{ placed.x_pos }}px; top: {{ placed.y_pos }}px;" data-furniture-id="{{ placed.furniture.id }}">
+                        <img src="{{ placed.furniture.image.url }}">
+                        <button class="delete-btn" title="Удалить предмет">&times:</button>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="controls-panel">
+                {% csrf_token %}
+                <button id="saveRoom" class="btn btn-success">Сохранить</button>
+            </div>
+        </section>
+    </main>
+    <script src="{% static 'conctructor/js/script.js' %}"></script>
+</body>
+</html>
