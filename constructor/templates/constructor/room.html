@@ -30,9 +30,24 @@
         <section class="room-panel">
             <div class="room-workspace" id="roomWorkspace" data-room-id="{{ room.id }}">
                 {% for placed in placed_furniture %}
-                    <div class="placed-item" style="left: {{ placed.x_pos }}px; top: {{ placed.y_pos }}px;" data-furniture-id="{{ placed.furniture.id }}">
+                    <div 
+                            class="placed-item" 
+                            style="
+                                    left: {{ placed.x_pos }}px; 
+                                    top: {{ placed.y_pos }}px; 
+                                    width: {{ placed.width }}px; 
+                                    height: {{ placed.height }}px; 
+                                    transform: rotate({{ placed.rotation }}deg)" 
+                            data-furniture-id="{{ placed.furniture.id }}" 
+                            data-width="{{ placed.width }}" 
+                            data-height="{{ placed.height }}" 
+                            data-rotation="{{ placed.rotation }}">
+                        <div class="placed-item-controls">
+                            <button class="control-btn rot-left">&#8634;</button>
+                            <button class="control-btn rot-right">&#8635;</button>
+                        </div>
                         <img src="{{ placed.furniture.image.url }}">
-                        <button class="delete-btn" title="Удалить предмет">&times:</button>
+                        <button class="delete-btn" title="Удалить предмет">&times;</button>
                     </div>
                 {% endfor %}
             </div>
@@ -42,6 +57,6 @@
             </div>
         </section>
     </main>
-    <script src="{% static 'conctructor/js/script.js' %}"></script>
+    <script src="{% static 'constructor/js/script.js' %}"></script>
 </body>
 </html>

@@ -28,6 +28,9 @@ class RoomFurniture(models.Model):
     furniture = models.ForeignKey(Furniture, on_delete=models.CASCADE, verbose_name='Предмет мебели')
     x_pos = models.IntegerField(default=0, verbose_name='Координата X (px)')
     y_pos = models.IntegerField(default=0, verbose_name='Координата Y (px)')
+    width = models.IntegerField(default=80, verbose_name='Ширина (px)')
+    height = models.IntegerField(default=80, verbose_name='Высота (px)')
+    rotation = models.IntegerField(default=0, verbose_name='Угол поворота (гр.)')
 
     class Meta:
         verbose_name = 'Размещенный предмет'

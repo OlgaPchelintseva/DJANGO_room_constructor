@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 import json
 from django.http import JsonResponse
 from .models import Room, Furniture, RoomFurniture
+from django.views.decorators.csrf import csrf_exempt
 
 def room_view(request):
     room, created = Room.objects.get_or_create(id=1, defaults={'name': 'Моя комната'})
@@ -14,6 +15,7 @@ def room_view(request):
     }
     return render(request, 'constructor/room.html', context)
 
+@csrf_exempt
 def room_save(request, room_id):
     if request.method == 'POST':
         room = get_object_or_404(Room, id=room_id)
@@ -22,15 +24,21 @@ def room_save(request, room_id):
             items = data.get('items', [])
             RoomFurniture.objects.filter(room=room).delete() #удаляем старое расположение комнаты, чтобы запистаь новое
             for item in items:
-                furniture_id = items.get('furniture_id')
+                furniture_id = item.get('furniture_id')
                 x = item.get('x', 0)
                 y = item.get('y', 0)
+                width = item.get('width', 0)
+                height = item.get('height', 0)
+                rotation = item.get('rotation', 0)
                 furniture = Furniture.objects.get(id=furniture_id)
                 RoomFurniture.objects.create(
                     room = room,
                     furniture = furniture,
                     x_pos = x,
-                    y_pos = y
+                    y_pos = y,
+                    width = width,
+                    height = height,
+                    rotation = rotation
                 )
             return JsonResponse({'status': 'success', 'message': 'Комната сохранена'})
         except Exception as e:
